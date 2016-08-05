@@ -1,0 +1,15 @@
+package pigLatin;
+
+public class Scratch {
+
+	public static void main(String[] args) {
+
+		String[] stuff = new String[10];
+		
+		System.out.println(stuff);
+		
+		
+		
+	}
+
+}

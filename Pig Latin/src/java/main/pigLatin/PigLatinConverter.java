@@ -12,8 +12,8 @@ public class PigLatinConverter {
 
 		System.out.println("Pig Latin Translator!");
 		System.out.println("Please enter your sentence:");
-		// Takes user input, converts to string builder, breaks into words,
-		// deposits into array
+		// Takes user input, converts to lower case, removes extraneous spaces,
+		// and dumps each individual word into an array.
 		Scanner pigLatin = new Scanner(System.in);
 		String userSentence = pigLatin.nextLine();
 		userSentence = userSentence.toLowerCase();
@@ -23,18 +23,23 @@ public class PigLatinConverter {
 
 		int wordArrayLength = sentenceWords.length;
 
+		// This array will house our words once they have been converted to Pig
+		// Latin.
 		String[] convertedWords = new String[wordArrayLength];
 
 		pigLatin.close();
 
-		// loops through all words in the array of words
+		// This loops through all words in the array of words and feeds each
+		// word, one at a time, to a second loop that scans each letter in the
+		// word looking for vowels.
 		for (int word = 0; word < wordArrayLength; word++) {
 			String currentWord = sentenceWords[word];
 			StringBuilder currentWordSB = new StringBuilder(currentWord);
 			int numberChars = currentWordSB.length();
 
-			// loops through each letter of individual words looking for the
-			// first vowel
+			// This loops though every letter in a word looking for the first
+			// vowel, then applies the correct logic based on position of first
+			// vowel as per the Pig Latin rules.
 			for (int letter = 0; letter <= numberChars; letter++) {
 				char isThisVowel = currentWordSB.charAt(letter);
 				switch (isThisVowel) {
@@ -52,6 +57,35 @@ public class PigLatinConverter {
 					}
 					break;
 
+				// The next two cases handle special letter combinations in
+				// English: y as a consonant in the initial position and 'qu'
+				case 'q':
+					if (currentWordSB.charAt(0) == 'q' && currentWordSB.charAt(1) == 'u') {
+						String currentWordSnippet = currentWordSB.substring(0, 2);
+						currentWordSB.delete(0, 2);
+						convertedWords[word] = currentWordSB.toString() + currentWordSnippet + "ay";
+					} else {
+						
+						continue;
+					}
+					break;
+				case 'y':
+					if (letter != 0) {
+						String currentWordSnippet = currentWordSB.substring(0, letter);
+						currentWordSB.delete(0, letter);
+						convertedWords[word] = currentWordSB.toString() + currentWordSnippet + "ay";
+					} else {
+
+						continue;
+					}
+					break;
+
+				// The default case handles when the current letter being
+				// analyzed is a consonant. If this consonant is not the last
+				// letter, we need to continue to iterate. If it is the last
+				// letter, we have been fed a word with no vowels. We treat
+				// these as acronyms/abbreviations and put them back into the
+				// final sentence as-is.
 				default:
 					if (letter == (numberChars - 1)) {
 						convertedWords[word] = currentWordSB.toString();
@@ -65,7 +99,7 @@ public class PigLatinConverter {
 
 		}
 
-		// prints out original input in Pig Latin
+		// Prints out original input converted to Pig Latin
 		for (int wordPrint = 0; wordPrint < convertedWords.length; wordPrint++) {
 			System.out.print(convertedWords[wordPrint] + " ");
 		}
